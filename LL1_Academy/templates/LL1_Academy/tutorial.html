@@ -26,20 +26,20 @@
 
 <script id="question-template" type="text/x-handlebars-template">
   <div class="question" id="active" style="display: none">
-  	<p class="question-help" style="display: none; color: black;"></p>
-	<p class="question-title">{{question}}</p>
+    <p class="question-help" style="display: none; color: black;"></p>
+    <p class="question-title">{{question}}</p>
     <form id="question-input" onsubmit="return false;">
-		{{#each terminals}}
-			<div class="pretty info smooth">
-				  <input type="checkbox" name="question-check" id="{{this}}-check" value="{{this}}"> 
-				  <label for="{{this}}-check"><i class="im im-check-mark"></i>{{this}}</label>
-				</div>
-    	{{/each}}
-    	<!-- TODO: make radio button question -->
-    	<!--
-			<input type="radio" name="ll1" value="True" id="input1" style="display:inline;" required> True
-  			<input type="radio" name="ll1" value="False" id="input2" style="display:inline;margin-left:10px;"> False
-		 -->
+      {{#if terminals}}
+      {{#each terminals}}
+      <div class="pretty info smooth">
+	<input type="checkbox" name="question-check" id="{{this}}-check" value="{{this}}"> 
+	<label for="{{this}}-check"><i class="im im-check-mark"></i>{{this}}</label>
+      </div>
+      {{/each}}
+      {{else}}
+      <input type="radio" name="ll1" value="true" id="input1" style="display:inline;" required> Yes
+      <input type="radio" name="ll1" value="false" id="input2" style="display:inline;margin-left:10px;"> No
+      {{/if}}
 		<div class="feedback"></div>
 		<div id="buttons-container">
 	    	<!-- <button type="button" class="button" id="giveup">Give Up</button> -->
