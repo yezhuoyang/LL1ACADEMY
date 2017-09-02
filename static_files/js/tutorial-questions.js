@@ -9,7 +9,11 @@ var first1_grammar = {
 		question: "What is the first set of symbol A?",
 		answer: "x",
 		type: "checkbox",
-		terminals: ['x','y','ε'],
+		terminals: ['x','y'],
+	}, {
+		question: "Is symbol A nullable?",
+		answer: "false",
+		type: "boolean"
 	}]
 
 }
@@ -25,7 +29,11 @@ var first2_grammar = {
 		question: "What is the first set of symbol A?",
 		answer: "x,y",
 		type: "checkbox",
-		terminals: ['x','y','z','ε'],
+		terminals: ['x','y','z'],
+	}, {
+		question: "Is symbol A nullable?",
+		answer: "false",
+		type: "boolean"
 	}]
 }
 
@@ -44,13 +52,21 @@ var first3_grammar = {
 		question: "What is the first set of symbol B?",
 		answer: "y",
 		type: "checkbox",
-		terminals: ['x','y','z','ε'],
+		terminals: ['x','y','z'],
+	}, {
+		question: "Is symbol B nullable?",
+		answer: "false",
+		type: "boolean"
 	},
 	{
 		question: "What is the first set of symbol A?",
 		answer: "y,z",
 		type: "checkbox",
-		terminals: ['x','y','z','ε'],
+		terminals: ['x','y','z'],
+	}, {
+		question: "Is symbol A nullable?",
+		answer: "false",
+		type: "boolean"
 	}]
 }
 
@@ -63,9 +79,13 @@ var first6_grammar = {
     helptext: "Here, we introduce the concept of ε, which is our symbol which denotes an empty string. In other words, the production A = ε converts the nonterminal symbol to nothing. <br><br> If there exists such a production, we add ε to the First Set of A, and A is now considered a “nullable” nonterminal. In general, if A is nullable, then A can be replaced by the empty string. Don’t forget to include A = xy in your calculation of the First Set of A.",
 	questions:[{
 		question: "What is the first set of symbol A?",
-		answer: "x,ε",
+		answer: "x",
 		type: "checkbox",
-		terminals: ['x','y','ε'],
+		terminals: ['x','y'],
+	}, {
+		question: "Is symbol A nullable?",
+		answer: "true",
+		type: "boolean"
 	}]
 }
 
@@ -82,15 +102,23 @@ var first7_grammar = {
     helptext: "In a production such as A = Bx, notice that the leftmost symbol B is nullable (includes ε in its First Set). In this case, the First Set of A includes y from the First Set of B. Instead of adding ε from the First Set of B to the First Set of A, look at the next leftmost symbol in the production, in this case x. Thus, we add x to the First Set of A. <br><br> While not needed in our example, consider how this could be a recursive procedure: if multiple of the leftmost symbols in a production are nullable, we would need to add the First Set of each of those nullable symbols, stopping only when we reach the First Set of a symbol which is not nullable. This will be explained further in a later example.",
 	questions:[{
 		question: "What is the first set of symbol B?",
-		answer: "y,ε",
+		answer: "y",
 		type: "checkbox",
-		terminals: ['x','y','z','ε'],
+		terminals: ['x','y','z'],
+	}, {
+		question: "Is symbol B nullable?",
+		answer: "true",
+		type: "boolean"
 	},
 	{
 		question: "What is the first set of symbol A?",
 		answer: "x,y,z",
 		type: "checkbox",
-		terminals: ['x','y','z','ε'],
+		terminals: ['x','y','z'],
+	}, {
+		question: "Is symbol A nullable?",
+		answer: "false",
+		type: "boolean"
 	}
 	]
 }
@@ -109,14 +137,22 @@ var first9_grammar = {
 	questions:[
 	{
 		question: "What is the first set of symbol B?",
-		answer: "ε",
+		answer: "",
 		type: "checkbox",
-		terminals: ['x','ε'],
+		terminals: ['x'],
+	}, {
+		question: "Is symbol B nullable?",
+		answer: "true",
+		type: "boolean"
 	},{
 		question: "What is the first set of symbol A?",
-		answer: "x,ε",
+		answer: "x",
 		type: "checkbox",
-		terminals: ['x','ε'],
+		terminals: ['x'],
+	}, {
+		question: "Is symbol A nullable?",
+		answer: "true",
+		type: "boolean"
 	}]
 }
 
@@ -142,26 +178,42 @@ var first10_grammar = {
 	questions:[
 	{
 		question: "What is the first set of symbol B?",
-		answer: "y,ε",
+		answer: "y",
 		type: "checkbox",
-		terminals: ['w','x','y','z','ε'],
+		terminals: ['w','x','y','z'],
+	}, {
+		question: "Is symbol B nullable?",
+		answer: "true",
+		type: "boolean"
 	},
 	{
 		question: "What is the first set of symbol C?",
-		answer: "x,ε",
+		answer: "x",
 		type: "checkbox",
-		terminals: ['w','x','y','z','ε'],
+		terminals: ['w','x','y','z'],
+	}, {
+		question: "Is symbol C nullable?",
+		answer: "true",
+		type: "boolean"
 	},
 	{
 		question: "What is the first set of symbol D?",
 		answer: "z",
 		type: "checkbox",
-		terminals: ['w','x','y','z','ε'],
+		terminals: ['w','x','y','z'],
+	}, {
+		question: "Is symbol D nullable?",
+		answer: "false",
+		type: "boolean"
 	},{
 		question: "What is the first set of symbol A?",
-		answer: "x,y,z,ε",
+		answer: "x,y,z",
 		type: "checkbox",
-		terminals: ['w','x','y','z','ε'],
+		terminals: ['w','x','y','z'],
+	}, {
+		question: "Is symbol A nullable?",
+		answer: "true",
+		type: "boolean"
 	},
 	{
 		type: "text",

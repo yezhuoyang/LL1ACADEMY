@@ -240,8 +240,44 @@ function load_next_question() {
 			}
 		});
 
+	} else if (curQ.type == "boolean") {
+                curQ.booleanQuestion = true;
+                console.log(JSON.stringify(curQ));
+		if (!$("#grammar-container").is(':visible')) {
+			$("#full-explanation-container").hide();
+			$("#grammar-container").fadeIn();
+			$("#questions-wrapper").fadeIn();
+		}
+
+		// console.log(curQ.grammar)
+		if (newGrammar) {
+			// console.log("hi new grammar here")
+			// console.log(questions[currentQ])
+			$('#grammar').html(grammar_template(curGrammar))
+			$('#questions-container').html(question_template(curQ));
+			$('.question-help').html(curGrammar.helptext)
+			$('.question-help').show();
+			$('#active').fadeIn({duration:800});
+		} else {
+			$('#question-input').remove()
+			var prevAnswer = curGrammar.questions[grammarQIndex - 1].answer;
+			$('#active > .question-title').after('<div id="answer-panel"><p class="answer">' + prevAnswer + '</p></div><div style="clear:both;">')
+			$('#active').removeAttr('id')
+			$('#questions-container').append(question_template(curQ));
+			$('#active').fadeIn({duration:800});
+		}
+
+		// submit handler:
+		$('#question-input').on('submit', function() {
+		  if($("input[name=ll1]:checked").val() == curQ.answer) {
+		    $('#question-input').remove()
+		    load_next_question();
+		  } else {
+		    $('#question-input > .feedback').html("<p>Incorrect answer</p>")
+		  }
+                });
 	} else {
-		console.log("this question type not yet implemented");
+		console.log("question type " + curQ.type + " not yet implemented");
 	}
 }
 
