@@ -128,6 +128,7 @@
 					<li><b>Nonterminal Symbols</b>: These are symbols which can be replaced by combinations of nonterminal and terminal symbols according to production rules. In this tutorial, these are denoted by the upper case letters A, B, C, and D.</li>
 					<li><b>Terminal Symbols</b>: These are symbols which cannot be replaced and make up the strings of the language. In this tutorial, these are denoted by the lower case letters w, x, y, and z.</li>
 					<li><b>Start Symbol</b>: This is a predefined nonterminal symbol from which all strings in the language must be derived from. In other words, if a string cannot be made through a series of productions starting from the Start Symbol, it is not in the language. In the following tutorial, “A” is always going to be the Start Symbol.</li>
+					<li><b>Nullable Symbols</b>: These are symbols that can generate the empty string ε. Symbol A is nullable if there is a production A -> ε or a production A -> B, for some nullable symbol B.</li>
 					<li><b>LL(1) Grammars</b>: Subset of grammars that fulfill the condition that parsers only need one nonterminal character of lookahead to parse from a string in the language.</li>
 					<li><b>First Set of a Symbol S</b>: The set of all terminal symbols that begin the strings derived from S.</li>
 					<li><b>Follow Set</b>: The set of all terminal symbols which immediately follow all the strings derived from S.</li>
