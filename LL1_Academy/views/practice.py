@@ -78,6 +78,7 @@ def practice(request):
 def get_question(request):
 	gid = request.session['gid']
 	currentQ = request.session['curQ']
+	#print("gid = %s, currentQ = %s" % (gid, currentQ))
 	question = Question.objects.filter(gid__gid__exact=gid, qnum=currentQ).first()
 	category = question.get_category_display()
 	symbol = question.symbol
@@ -213,10 +214,11 @@ def check_answer(request):
 		isCorrect = False
 		feedback = ''
 
-		if (category == 'isLL1'):
-			answer = request.POST.get('ll1answer') == "True"
+		if (category == 'isLL1' or category == 'nullable'):
+			answer = request.POST.get('ll1answer') in ["True","Yes"]
 			true_answers = question.answer == "True"
 			isCorrect = answer == true_answers
+			#isCorrect = request.POST.get('ll1answer') == question.answer
 		elif (category == 'parseTable'):
 			answer = request.POST.get('answer')
 			answer_dict = ast.literal_eval(answer)

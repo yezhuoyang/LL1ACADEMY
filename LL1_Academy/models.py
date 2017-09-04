@@ -24,6 +24,7 @@ class Question(models.Model):
 		('FO','follow'),
 		('LL','isLL1'),
 		('PT','parseTable'),
+    ('NL','nullable')
 	)
 	gid = models.ForeignKey(Grammar, on_delete = models.CASCADE)
 	qnum = models.IntegerField()

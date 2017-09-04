@@ -22,7 +22,7 @@ class MassGrammarGenerator:
         
     def run(self,num, nonTerminals, terminals):
         self.nonTerminals = nonTerminals
-        self.terminals =terminals
+        self.terminals = terminals
 
         #generate num grammars, filter them and write the good ones to DB
         for i in range(0,num):
@@ -46,23 +46,31 @@ class MassGrammarGenerator:
         result = self.gc.solve(grammar,'A',False)
 
         #Abandon left recursive grammars and grammars with non-reachable variables
-        if (result[3] == -1) or (not result[4]):
+        if (result['status'] == -1) or (not result['reachability']):
             return
         
         #If the ML model decidese it's interesting, save to DB
-        prediction = self.learnModel.predictGrammar(grammar,result[0],result[1])
+        prediction = self.learnModel.predictGrammar(grammar,result['first'],result['follow'])
         if prediction[0]==1:
             self.saveToDB(grammar,result)
-            print("YES: "+str(grammar)+"\n\tFirst: "+str(result[0])+"\n\tFollow: "+str(result[1]))
+            print("YES: "+str(grammar)+"\n\tFirst: "+str(result['first'])+"\n\tFollow: "+str(result['follow']))
         else:
-            print("NO: "+str(grammar)+"\n\tFirst: "+str(result[0])+"\n\tFollow: "+str(result[1]))
+            print("NO: "+str(grammar)+"\n\tFirst: "+str(result['first'])+"\n\tFollow: "+str(result['follow']))
 
                 
     def saveToDB(self,grammar,result):
         #This function takes the grammar and the result returned by gc.solve. It
         #populates the Grammar and Question table in DB with the correct fields
 
-        firstSets, followSets, parsingTable, status, reachable, terminals = result
+        firstSets = result['first']
+        followSets = result['follow']
+        parsingTable = result['parseTable']
+        status = result['status']
+        reachable = result['reachability']
+        terminals = result['terminals']
+        nullable = result['nullable']
+        # firstSets, followSets, parsingTable, status, reachable, terminals = result
+        
         newG = Grammar(prods=str(grammar), nonTerminals=''.join(self.nonTerminals), 
                 terminals=''.join(terminals), startSymbol='A')
         newG.save()
@@ -74,13 +82,21 @@ class MassGrammarGenerator:
                     symbol=v,answer=''.join(firstSets[v]))
             qFirst.save()
             qnum +=1
-        
+
+            qNull = Question(gid=newG,qnum=qnum,category='NL',
+                             symbol=v,answer=nullable[v])
+            qNull.save()
+            qnum +=1
+
+
+            
         for v in self.nonTerminals:
             qFollow = Question(gid=newG,qnum=qnum,category='FO',
                     symbol=v,answer=''.join(followSets[v]))
             qFollow.save()
             qnum +=1 
 
+            
         #Parse Table Question
         qPT = Question(gid=newG,qnum=qnum,category='PT',answer=str(parsingTable))
         qPT.save()

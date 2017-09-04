@@ -48,6 +48,7 @@ class GrammarChecker:
         self.firstOfStack = []
         self.isLL1 = True
         self.leftRecursionFound = False
+
         
         self.grammar = grammar
         self.startsymbol = startsymbol
@@ -61,10 +62,23 @@ class GrammarChecker:
         
         returnFirstSets = {}
         returnFollowSets = {}
+
+        # remove epsilon from first sets. put nullable nonterminals
+        # into a separate dictionary
+        returnNullable = {}
+        for nt in self.nonterminals:
+            if epsilon in self.firstSets[nt]:
+                returnNullable[nt] = True
+                self.firstSets[nt].remove(epsilon)
+            else:
+                returnNullable[nt] = False
+
+        
         for nt in self.nonterminals:
             returnFirstSets[nt] = sorted(list(self.firstSets[nt]))
             returnFollowSets[nt] = sorted(list(self.followSets[nt]))
-        
+
+            
         status = -1 if self.leftRecursionFound else (0 if self.isLL1 else 1)
         if self.verbose:
             if self.leftRecursionFound: 
@@ -74,7 +88,15 @@ class GrammarChecker:
                     print("grammar is LL(1)") 
                 else:
                     print("grammar is NOT LL(1)")
-        return((returnFirstSets,returnFollowSets,self.parsingTable,status,GrammarChecker.reachability(self),sorted(list(self.terminals))))
+        return {
+            'first' : returnFirstSets,
+            'follow' : returnFollowSets,
+            'parseTable' : self.parsingTable,
+            'status' : status,
+            'reachability' : GrammarChecker.reachability(self),
+            'terminals' : sorted(list(self.terminals)),
+            'nullable' : returnNullable
+        }
     
     def getSymbols(self, grammar):
         self.grammar = grammar

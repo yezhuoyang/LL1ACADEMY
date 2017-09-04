@@ -12,6 +12,9 @@ Handlebars.registerHelper("printParseTableCells", function(non_terminal) {
 var question_template_src   = $("#question-template").html();
 var question_template = Handlebars.compile(question_template_src);
 
+var nullable_question_template_src = $("#nullable-question-template").html();
+var nullable_question_template = Handlebars.compile(nullable_question_template_src);
+
 var parseTable_template_src   = $("#parseTable-template").html();
 var parseTable_template = Handlebars.compile(parseTable_template_src);
 
@@ -421,7 +424,7 @@ function draw_question() {
 	}
 
 	if (question_data.category == "first") {
-		question_data.terminals.push("ε")
+		// question_data.terminals.push("ε")
 	} else if (question_data.category == "follow") {
 		question_data.terminals.push("$")
 	}
@@ -438,7 +441,10 @@ function draw_question() {
 		})
 	}
 	else {
-		$('#questions-container').append(question_template(question_data));
+          if(question_data.category == "nullable")
+            $('#questions-container').append(nullable_question_template(question_data));
+          else
+            $('#questions-container').append(question_template(question_data));
 	}
 
 	$('#active').fadeIn({duration:800});
