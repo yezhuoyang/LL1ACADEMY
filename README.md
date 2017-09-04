@@ -42,3 +42,21 @@ __LL1_Academy/models.py__:  Database models through Django's ORM.
 __LL1_Academy/tests.py__:  Test cases for features in the application.
 
 __LL1_Academy/views/__:  Where the majority of the web application logic is
+
+## Generating questions:
+
+The problem generator is accessible as a Django command. Basic usage is:
+
+    $ LL1-Academy-virtualenv/bin/python manage.py populate <num_attempts>
+
+Using LL1-Academy-virtualenv/bin/python will make sure all the python
+dependencies are available. This is the virtualenv directory on fiji,
+but is not on git (you'll have to set that up yourself for a local dev
+install).
+
+The command will generate <num_attempts> grammars, and add questions
+based on those it finds to be sufficiently interesting. Thus, you may
+need to run this multiple times to get the desired number of
+successfully generated grammars/questions.
+
+To remove existing questions from the databsae, use the --reset flag.
