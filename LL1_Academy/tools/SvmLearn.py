@@ -27,7 +27,7 @@ class SvmLearn:
         #   not intereing grammars
 
         self.nVariable = nVariable
-        # tData: an array X of size [n_samples, n_features] holding 
+        # tData: a 2d array of size [n_samples][n_features] holding 
         # the training samples
         self.tData = []
         # labels: an array y of class labels, size [n_samples]
@@ -99,6 +99,10 @@ class SvmLearn:
         # This helper function builds a feature array of a grammar
         # Input: grammar, first and follow as the grammar checker returns (refer to that for format)
         # Output: an array of integers representing the features
+        # What do the integers mean? They seem to mean:
+        # 1. For each nonterminal there is a sequence of features describing the productions
+        #    larger numbers tend to mean greater complexity. Productions are sorted by complexity in order to normalize a bit. Would it make sense to sort the nonterminals by some complexity measure (say average production complexity, or production variety?)
+        # 2. Features of each nonterminal are the length of its first and follow sets
         if not (isinstance(grammar,dict) and isinstance(first,dict) and isinstance(follow,dict)):
             raise Exception('Wrong format of grammar input')
         if not (len(grammar)==self.nVariable and len(first)==self.nVariable and len(follow)==self.nVariable):
