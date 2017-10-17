@@ -510,13 +510,6 @@ class GrammarAnalyzer:
 
     raise Exception('cannot determine production type for ' + p)
 
-    
-class GrammarClassifier:
-  def __init__(self,good_grammars,bad_grammars):
-    pass
-
-  def grammar_features(self,g):
-    pass
 
 def generateProduction(nts, ts, maxProdLen):
   # print "generateProduction"
@@ -628,48 +621,32 @@ class NoNullableNTs:
 grammarSpecs = {
     'EASY_LL1' :
     AND(isLL1(), NOT(FollowConstraintCycles())),
-    #lambda a: (a.isLL1 and
-    #           not a.followConstraintCycles()),
     
     'EASY_NON_LL1' :
     AND(NOT(isLL1()),
         NOT(FollowConstraintCycles()),
         NOT(FirstConstraintCycles())),
-    #lambda a: (not a.isLL1 and
-    #           not a.followConstraintCycles() and
-    #           not a.firstConstraintCycles()),
     
     'MED_LL1' :
     AND(isLL1(), FollowConstraintCycles()),
-    #lambda a: (a.isLL1 and
-    #           a.followConstraintCycles()),
 
     # Left-recursion
     'MED1_NON_LL1' :
     AND(NOT(isLL1()),
         NOT(FollowConstraintCycles()),
         FirstConstraintCycles()),
-    #lambda a: (not a.isLL1 and
-    #           not a.followConstraintCycles() and
-    #           a.firstConstraintCycles()),
 
     # Left-recursion
     'MED2_NON_LL1' :
     AND(NOT(isLL1()),
         FollowConstraintCycles(),
         NOT(FirstConstraintCycles())),
-    #lambda a: (not a.isLL1 and
-    #           a.followConstraintCycles() and
-    #           not a.firstConstraintCycles()),
     
     'HARD_LL1' :
     AND(isLL1(),
         ExistsNullableNT(),
         NOT(ExistsNTWithOneProduction()),
         FollowConstraintCycles()),
-    #lambda a: (a.isLL1 and
-    #           a.countNullable() > 0 and
-    #           a.followConstraintCycles()),
     
     'HARD_NON_LL1' :
     AND(NOT(isLL1()),
@@ -677,10 +654,6 @@ grammarSpecs = {
         NOT(ExistsNTWithOneProduction()),
         FollowConstraintCycles(),
         FirstConstraintCycles())
-    #lambda a: (not a.isLL1 and
-    #           a.countNullable() > 0 and
-    #           a.followConstraintCycles() and
-    #           a.firstConstraintCycles())
   }  
 def findGrammar(pred, **kwargs):
   pred = grammarSpecs.get(pred, pred)
