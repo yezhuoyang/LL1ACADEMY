@@ -7,6 +7,7 @@ import string
 import logging
 import random
 import numpy as np
+from functools import reduce
 
 epsilon = u'ε'
 
@@ -66,15 +67,12 @@ ProductionType = Enum(
 def concatList(ls):
   return reduce(lambda x, y: x + y, ls, [])
 
-def concatStr(ls):
-  return reduce(lambda x, y: x + y, ls, '')
-
 # return a list of the upper-case letters in a string
 def uppers(s):
-  return [c for c in s if c in string.uppercase]
+  return [c for c in s if c in string.ascii_uppercase]
 
 def lowers(s):
-  return [c for c in s if c in string.lowercase]
+  return [c for c in s if c in string.ascii_lowercase]
 
 logger = logging.getLogger('GrammarAnalyzer')
 
@@ -89,7 +87,7 @@ class GrammarAnalyzer:
     self.g = g
     
     # all the terminals that appear in the grammar
-    self.terminals = list(set(lowers(concatStr([p for nt in g for p in g[nt]]))))
+    self.terminals = list(set(lowers(''.join([p for nt in g for p in g[nt]]))))
 
     self.firstSets = {}
     self.followSets = {}
@@ -125,7 +123,7 @@ class GrammarAnalyzer:
     def symbol_nullable(s):
       if s == epsilon:
         return True
-      if s in string.uppercase:
+      if s in string.ascii_uppercase:
         return s in self.nullable
       return False
       
@@ -140,12 +138,12 @@ class GrammarAnalyzer:
   def first_of_production(self,p):
     if p == epsilon or len(p) == 0:
       return set()
-    if p[0] in string.lowercase:
+    if p[0] in string.ascii_lowercase:
       return set(p[0])
       
     s = set()
     for x in p:
-      if x in string.lowercase:
+      if x in string.ascii_lowercase:
         # terminal
         s.add(x)
         return s
@@ -177,10 +175,10 @@ class GrammarAnalyzer:
         if p == epsilon or len(p) == 0:
           continue
         for c in p:
-          if c in string.lowercase:
+          if c in string.ascii_lowercase:
             constraints.add((c, 'in', nt))
             break
-          elif c in string.uppercase:
+          elif c in string.ascii_uppercase:
             constraints.add((c, 'subset', nt))
             if c not in self.nullable:
               break
@@ -242,7 +240,7 @@ class GrammarAnalyzer:
     constraints = set()
     def splitProd(p):
       for i in range(len(p)):
-        if p[i] in string.uppercase:
+        if p[i] in string.ascii_uppercase:
           yield (p[:i],p[i],p[i+1:])
 
     for nt in self.g:
@@ -307,7 +305,6 @@ class GrammarAnalyzer:
     logger.debug('Computing followSets for %s' % self.g)
     
     def updateFollow(nt, c):
-      # s = set(c) if c in string.lowercase else self.followSets[c]
       s = c
       if not s.issubset(self.followSets[nt]):
         logger.debug("Adding %s to follow(%s) = %s" % (s,nt,self.followSets[nt]))
@@ -317,7 +314,7 @@ class GrammarAnalyzer:
 
     def splitProd(p):
       for i in range(len(p)):
-        if p[i] in string.uppercase:
+        if p[i] in string.ascii_uppercase:
           yield (p[:i],p[i],p[i+1:])
 
     while(change):
@@ -333,7 +330,7 @@ class GrammarAnalyzer:
     if p == epsilon:
       return True
     for s in p:
-      if s in string.lowercase:
+      if s in string.ascii_lowercase:
         return False
       if s not in self.nullable:
         return False
@@ -359,7 +356,7 @@ class GrammarAnalyzer:
     nt_features = dict([(nt, self.nonterminal_features(g,nt)) for nt in g])
 
     # sort nonterminals by their features
-    nts = g.keys()
+    nts = list(g.keys())
     nts.sort(lambda k1, k2: cmp(nt_features[k1], nt_features[k2]))
 
     # concatentate all features
@@ -549,9 +546,9 @@ def generateGrammar(nts, ts, maxProds, maxProdLen):
       # make sure it can generate some string
       if r == [] or r == ['']:
         continue
-      if not any([c in string.lowercase for p in r for c in p]):
+      if not any([c in string.ascii_lowercase for p in r for c in p]):
         continue
-      if not any([len(p) > 0 and p[0] in string.lowercase for p in r]):
+      if not any([len(p) > 0 and p[0] in string.ascii_lowercase for p in r]):
         continue
       
       # not all productions can have self-reference
@@ -800,6 +797,5 @@ class ParseTableGenerator:
 
 def generateLL1Grammar(nts,ts,maxProds,maxProdLen):
   gen = ParseTableGenerator(nts,ts,maxProds,maxProdLen)
-  #print gen.tbl
   return gen.g
 
