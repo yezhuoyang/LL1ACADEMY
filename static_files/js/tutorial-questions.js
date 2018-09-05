@@ -137,9 +137,9 @@ var first9_grammar = {
 	questions:[
 	{
 		question: "What is the first set of symbol B?",
-		answer: "",
+		answer: "ε",
 		type: "checkbox",
-		terminals: ['x'],
+		terminals: ['x', 'ε'],
 	}, {
 		question: "Is symbol B nullable?",
 		answer: "true",
