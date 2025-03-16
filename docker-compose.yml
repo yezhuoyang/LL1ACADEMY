@@ -2,6 +2,11 @@
  services:
    db:
      image: postgres
+     container_name: db-1
+     environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "mysecretpassword"
    web:
      build: .
      command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"

@@ -20,8 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+'''
 with open('/var/www/LL1-Academy/secret_key.txt') as f:
     SECRET_KEY = f.read().strip()
+'''
+
+SECRET_KEY = 'sc**kkwq+#zb)s-0duj-k-j^92l-cj6x^7*-*eyba#6+obwftf'
 
 # old secret key (public in github)
 # SECRET_KEY = 'sc**kkwq+#zb)s-0duj-k-j^92l-cj6x^7*-*eyba#6+obwftf'
@@ -87,8 +91,9 @@ WSGI_APPLICATION = 'cs130_LL1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
+        'NAME': 'mydb',               # match POSTGRES_DB
+        'USER': 'postgres',           # match POSTGRES_USER
+        'PASSWORD': 'mysecretpassword',  # match POSTGRES_PASSWORD
         'HOST': 'db',
         'PORT': 5432,
     }
