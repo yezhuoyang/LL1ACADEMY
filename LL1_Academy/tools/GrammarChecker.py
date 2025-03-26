@@ -162,8 +162,8 @@ class GrammarChecker:
         self.firstOfStack.append(symbol)
 
         for production in self.grammar[symbol]:        
-            self.firstSets[symbol] = self.firstSets[symbol].union( \
-                GrammarChecker.firstOfProduction(self,production))
+            firstOfProd = GrammarChecker.firstOfProduction(self,production)
+            self.firstSets[symbol] = self.firstSets[symbol].union(firstOfProd)
 
         self.firstOfStack.pop()
         return self.firstSets[symbol]
@@ -248,22 +248,54 @@ class GrammarChecker:
                     for terminal in GrammarChecker.firstOfProduction(self,prod):
                         if terminal != self.epsilon:
                             if terminal in self.parsingTable[LHS]:
-                                self.isLL1 = False
                                 self.parsingTable[LHS][terminal].append(prod)
                             else:
                                 self.parsingTable[LHS][terminal] = [prod]
+                        else: # in case the production is nullable, its follow set can be accepted
+                            for follow in self.followSets[LHS]:
+                                if follow in self.parsingTable[LHS]:
+                                    self.parsingTable[LHS][follow].append(prod)
+                                else:
+                                    self.parsingTable[LHS][follow] = [prod]
 
                 else:
                     for terminal in self.followSets[LHS]:
                         if terminal in self.parsingTable[LHS]:
-                            self.isLL1 = False
                             self.parsingTable[LHS][terminal].append(prod)
                         else:
                             self.parsingTable[LHS][terminal] = [prod]
         
+        # deduplicate parsing table
+        for LHS,parses in self.parsingTable.items():
+            for term,prods in parses.items():
+                self.parsingTable[LHS][term] = list(set(prods))
+                if len(self.parsingTable[LHS][term]) > 1:
+                    self.isLL1 = False
         if self.verbose:
             print ("parse table:")
             for nonterm,parses in self.parsingTable.items():
                 print(nonterm+":")
                 for term,prod in parses.items():
                     print("\t"+term+": ", prod)
+
+if __name__ == "__main__":
+    # Buggy grammar example
+    if True: # Question@ 321
+        grammar = {
+            'A': ['z', epsilon, 'zxxB'],
+            'B': ['zAA', 'yzBx', 'xyxA']
+        }
+        gc = GrammarChecker()
+        result = gc.solve(grammar, 'A', verbose=True)
+        print(result)
+
+    if False: # Question @268, bug fixed, when a production is nullable,
+        # the follow set of the nullable production should be added to the parsing table
+        # as well
+        grammar = {
+            'A': ['zz', 'yzAA', 'B'],
+            'B': [epsilon, 'wBw', 'zw']
+        }
+        gc = GrammarChecker()
+        result = gc.solve(grammar, 'A', verbose=True)
+        print(result)
