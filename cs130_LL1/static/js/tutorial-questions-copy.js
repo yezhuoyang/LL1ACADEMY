@@ -76,7 +76,7 @@ var first6_grammar = {
 		nt: 'A',
 		productions: ['xy', 'ε']
     }],
-    helptext: "Here, we introduce the concept of ε, which is our symbol which denotes an empty string. In other words, the production A = ε converts the nonterminal symbol to nothing. <br><br> If there exists such a production, A is now considered a “nullable” nonterminal. In general, if A is nullable, then A can be replaced by the empty string. Don’t forget to include A = xy in your calculation of the First Set of A.",
+    helptext: "Here, we introduce the concept of ε, which is our symbol which denotes an empty string. In other words, the production A = ε converts the nonterminal symbol to nothing. <br><br> If there exists such a production, we add ε to the First Set of A, and A is now considered a “nullable” nonterminal. In general, if A is nullable, then A can be replaced by the empty string. Don’t forget to include A = xy in your calculation of the First Set of A.",
 	questions:[{
 		question: "What is the first set of symbol A?",
 		answer: "x",
@@ -99,7 +99,7 @@ var first7_grammar = {
 		nt: 'B',
 		productions: ['y','ε']
     }],
-    helptext: "In a production such as A = Bx, notice that the leftmost symbol B is nullable. In this case, the First Set of A includes y from the First Set of B. Because B is nullable, look at the next leftmost symbol in the production, in this case x. Thus, we add x to the First Set of A. <br><br> While not needed in our example, consider how this could be a recursive procedure: if multiple of the leftmost symbols in a production are nullable, we would need to add the First Set of each of those nullable symbols, stopping only when we reach the First Set of a symbol which is not nullable. This will be explained further in a later example.",
+    helptext: "In a production such as A = Bx, notice that the leftmost symbol B is nullable (includes ε in its First Set). In this case, the First Set of A includes y from the First Set of B. Instead of adding ε from the First Set of B to the First Set of A, look at the next leftmost symbol in the production, in this case x. Thus, we add x to the First Set of A. <br><br> While not needed in our example, consider how this could be a recursive procedure: if multiple of the leftmost symbols in a production are nullable, we would need to add the First Set of each of those nullable symbols, stopping only when we reach the First Set of a symbol which is not nullable. This will be explained further in a later example.",
 	questions:[{
 		question: "What is the first set of symbol B?",
 		answer: "y",
@@ -133,13 +133,13 @@ var first9_grammar = {
 		nt: 'B',
 		productions: ['ε']
     }],
-    helptext: "In this case, for the first production of A, we see that it only consists of B. Since B is nullable and can go to null string, we now know that A is also nullable.",
+    helptext: "Whenever we see a production where all the nonterminals are nullable, we add ε to the First Set of that production. In this case, for the first production of A, we see that it only consists of B. Since B is nullable and can go to null string, we now know that A is also nullable, and add ε to the First Set of A.",
 	questions:[
 	{
 		question: "What is the first set of symbol B?",
-		answer: "",
+		answer: "ε",
 		type: "checkbox",
-		terminals: ['x'],
+		terminals: ['x', 'ε'],
 	}, {
 		question: "Is symbol B nullable?",
 		answer: "true",
@@ -174,7 +174,7 @@ var first10_grammar = {
 		nt: 'D',
 		productions: ['z']
     }],
-    helptext: "A = BC is an example of a production in which several of the leftmost production symbols are nullable. In calculating the First Set of A, we consider the First Set of B and the First Set of C; since both B and C are nullable, that means A is also nullable. <br><br> Furthermore, in the production A = BCDw, notice that both B and C are nullable, so we add the First Set of B, First Set of C, and First Set of D to the First Set of A. We do NOT add w to the First Set of A because D is NOT nullable, and therefore we do not look at any symbols to the right of D when calculating the First Set of A.",
+    helptext: "A = BC is an example of a production in which several of the leftmost production symbols are nullable. In calculating the First Set of A, we consider the First Set of B and the First Set of C; since both B and C are nullable, that means A is also nullable, so we add ε to the First Set of A. <br><br> Furthermore, in the production A = BCDw, notice that both B and C are nullable, so we add the First Set of B, First Set of C, and First Set of D to the First Set of A. We do NOT add w to the First Set of A because D is NOT nullable, and therefore we do not look at any symbols to the right of D when calculating the First Set of A.",
 	questions:[
 	{
 		question: "What is the first set of symbol B?",
@@ -217,7 +217,7 @@ var first10_grammar = {
 	},
 	{
 		type: "text",
-		text: '<div class="aboutSection" style="padding: 40px;"><p>Formal algorithm for calculating first sets:</p><ol><li>If X is a nonterminal, First(X) is X</li><li>If there is a production X -> ε, X is nulable</li><li>If there is a production X->Y<sub>1</sub> Y<sub>2</sub> … Y<sub>k</sub>, then add First(Y<sub>1</sub> Y<sub>2</sub>...Y<sub>k</sub>) to First(X)</li><ol type="a"><li>First(Y<sub>1</sub>, Y<sub>2</sub> … Y<sub>k</sub>) is either:</li><ol type="i"><li>If Y<sub>1</sub> is not nullable: First(Y<sub>1</sub>)</li><li>If Y<sub>1</sub> is nullable: First(Y<sub>1</sub>) and everything in First(Y<sub>2</sub>..Y<sub>k</sub>)</li><li>If all Y<sub>1</sub>, Y<sub>2</sub> … Y<sub>k</sub> are nullable, (Y<sub>1</sub>, Y<sub>2</sub> … Y<sub>k</sub>) is nullable and so is X</li></ol></ol></ol></div>'
+		text: '<div class="aboutSection" style="padding: 40px;"><p>Formal algorithm for calculating first sets:</p><ol><li>If X is a nonterminal, First(X) is X</li><li>If there is a production X -> ε (in other words, X is nulable), then add ε to First(X)</li><li>If there is a production X->Y<sub>1</sub> Y<sub>2</sub> … Y<sub>k</sub>, then add First(Y<sub>1</sub> Y<sub>2</sub>...Y<sub>k</sub>) to First(X)</li><ol type="a"><li>First(Y<sub>1</sub>, Y<sub>2</sub> … Y<sub>k</sub>) is either:</li><ol type="i"><li>If Y<sub>1</sub> is not nullable: First(Y<sub>1</sub>)</li><li>If Y<sub>1</sub> is nullable: First(Y<sub>1</sub>) except for epsilon and everything in First(Y<sub>2</sub>..Y<sub>k</sub>)</li><li>If all Y<sub>1</sub>, Y<sub>2</sub> … Y<sub>k</sub> are nullable, add ε to First(Y<sub>1</sub>, Y<sub>2</sub> … Y<sub>k</sub>)</li></ol></ol></ol></div>'
 	}]
 }
 
@@ -363,7 +363,7 @@ var follow5_grammar = {
 		question: "What is the first set of symbol C?",
 		answer: "z",
 		type: "checkbox",
-		terminals: ['w','x','y','z'],
+		terminals: ['w','x','y','z','ε'],
 	},
 	{
 		question: "What is the follow set of symbol B?",
@@ -387,17 +387,12 @@ var follow6_grammar = {
 		nt: 'C',
 		productions: ['z','ε']
 	}],
-	helptext: "Now we introduce ε when computing Follow Sets. First, let’s examine the production A = BCx. C appears immediately to the right of B; thus, we add the First Set of C to the Follow Set of B. The First Set of C consists of z, so we add z to the Follow Set of B. <br><br>Meanwhile, C is nullable. So, we should look at the next rightmost symbol of the production A = BCx, which is x. Thus, we add x to the Follow Set of B. Finally, add any additional symbols which would otherwise be in the Follow Set of B, such as w from the production A = wBw.",
+	helptext: "Now we introduce ε when computing Follow Sets. First, let’s examine the production A = BCx. C appears immediately to the right of B; thus, we add the First Set of C to the Follow Set of B. The First Set of C consists of z and ε, so we add z to the Follow Set of B. <br><br>However, ε cannot be in a Follow Set. Instead, trying to add ε to a Follow Set indicates that we should look at the next rightmost symbol of the production A = BCx, which is x. Thus, we add x to the Follow Set of B. Finally, add any additional symbols which would otherwise be in the Follow Set of B, such as w from the production A = wBw.",
 	questions:[{
 		question: "What is the first set of symbol C?",
-		answer: "z",
+		answer: "z,ε",
 		type: "checkbox",
-		terminals: ['w','x','y','z'],
-	},
-	{
-		question: "Is symbol C nullable?",
-		answer: "true",
-		type: "boolean"
+		terminals: ['w','x','y','z','ε'],
 	},
 	{
 		question: "What is the follow set of symbol B?",
@@ -421,12 +416,12 @@ var follow7_grammar = {
 		nt: 'C',
 		productions: ['z','ε']
 	}],
-	helptext: "In this grammar, we have removed x from the production A = BCx. Now, we have A = BC. C appears immediately to the right of B; thus, we add the First Set of C to the Follow Set of B. The First Set of C consists of z, so we add z to the Follow Set of B. Because C is nullable, we should look at the next rightmost symbol of the production A = BC. <br><br>However, now there are no symbols to the right of C. Thus, it is possible that B could be the last symbol of a production of A if we were to replace the C in A = BC with ε. As a result, we must include the Follow Set of A in the Follow Set of B since anything that follows A can follow B in this case. Since A does not appear in any production, the only symbol in its follow set is $. Thus, we add $ from the Follow Set of A to the Follow Set of B.",
+	helptext: "In this grammar, we have removed x from the production A = BCx. Now, we have A = BC. C appears immediately to the right of B; thus, we add the First Set of C to the Follow Set of B. The First Set of C consists of z and ε, so we add z to the Follow Set of B. However, ε cannot be in a Follow Set. Instead, trying to add ε to a Follow Set indicates that we should look at the next rightmost symbol of the production A = BC. <br><br>However, now there are no symbols to the right of C. Thus, it is possible that B could be the last symbol of a production of A if we were to replace the C in A = BC with ε. As a result, we must include the Follow Set of A in the Follow Set of B since anything that follows A can follow B in this case. Since A does not appear in any production, the only symbol in its follow set is $. Thus, we add $ from the Follow Set of A to the Follow Set of B.",
 	questions:[{
 		question: "What is the first set of symbol C?",
-		answer: "z",
+		answer: "z,ε",
 		type: "checkbox",
-		terminals: ['y','z'],
+		terminals: ['y','z','ε'],
 	},
 	{
 		question: "What is the follow set of symbol A?",
@@ -448,7 +443,7 @@ var follow7_grammar = {
 	},
 	{
 		type: "text",
-		text: '<div class="aboutSection" style="padding: 40px;"><p>Formal algorithm for calculating follow sets:</p><p>Note: α and β  are shorthand for Y<sub>1</sub> Y<sub>2</sub> … Y<sub>k</sub> and X<sub>1</sub> X<sub>2</sub> … X<sub>i</sub>, used so that the algorithm is more clear.</p><ol><li>Put $ in the Follow Set of the Start Symbol (In our case, A)</li><li>For each production:</li><ol type="a"><li>If it is of form A -> α B β , then everything in First(β) is placed in Follow Set of B</li><li>If it is of form A -> α B, then everything in Follow(A) is in Follow(B)</li><li>If it is of form A -> α B β , where β is nullable, then everything in Follow(A) is in Follow(B)</li></ol></ol></div>'
+		text: '<div class="aboutSection" style="padding: 40px;"><p>Formal algorithm for calculating follow sets:</p><p>Note: α and β  are shorthand for Y<sub>1</sub> Y<sub>2</sub> … Y<sub>k</sub> and X<sub>1</sub> X<sub>2</sub> … X<sub>i</sub>, used so that the algorithm is more clear.</p><ol><li>Put $ in the Follow Set of the Start Symbol (In our case, A)</li><li>For each production:</li><ol type="a"><li>If it is of form A -> α B β , then everything in First(β) except for ε is placed in Follow Set of B</li><li>If it is of form A -> α B, then everything in Follow(A) is in Follow(B)</li><li>If it is of form A -> α B β , where First(β) contains ε, then everything in Follow(A) is in Follow(B)</li></ol></ol></div>'
 	}]
 }
 
@@ -526,14 +521,14 @@ var parse_grammar_3 = {
 		productions: ['xB','ε']
 	}
 	],
-	helptext: 'First we’ll look at the productions for A. For A = By, the First(By) is x,y, so we add By to the entries corresponding to column x and y in row A.<br><br>Next, we’ll look at the productions for row B. For B = xB, the First(xB) is x, so we add xB to the entries corresponding to column x in row B. For B = ε, since it is nullable, we consider the Follow Set of the original nonterminal symbol B and we add the production to the entries corresponding to each element in that Follow Set. In this case, the Follow Set of B is y, so we add ε to the entry corresponding to the column y and the row B.',
+	helptext: 'First we’ll look at the productions for A. For A = By, the First(By) is x,y, so we add By to the entries corresponding to column x and y in row A.<br><br>Next, we’ll look at the productions for row B. For B = xB, the First(xB) is x, so we add xB to the entries corresponding to column x in row B. For B = ε, the First(ε) is ε. Since it is nullable, we consider the Follow Set of the original nonterminal symbol B and we add the production to the entries corresponding to each element in that Follow Set. In this case, the Follow Set of B is y, so we add  ε to the entry corresponding to the column y and the row B.',
 	questions: [
 		{
 			answer: '{"A":{"x":["By"],"y":["By"]},"B":{"x":["xB"],"y":["ε"]}}',
 			type: "parse",
 			terminals: ['x','y'],
 			non_terminals: ['A','B'],
-			first: ['x,y','x'],
+			first: ['x,y','x,ε'],
 			follow: ['$','y']
 		}
 	]
@@ -554,19 +549,19 @@ var parse_grammar_4 = {
 		productions: ['x', 'ε']
 	}
 	],
-	helptext: 'First we’ll look at the productions for A. For A = BC, First(BC) is x,y and BC is nullable. We add BC to the entries corresponding to columns x and y in row A. Notice that BC is nullable as well, so we have to consider the Follow Set of the original nonterminal symbol A, which is just $, so we add BC to the entry corresponding to column $ and row A. For A = xCy, First(xCy) is x. We add xCy to the entry corresponding to column x and row A.<br><br>Next, we’ll look at the productions for row B. For B = y, First(y) is y, so we add y to the entry corresponding to column y in row B. For B = ε, ε is nullable, so we have to consider the Follow Set of B, which is x,$. We add ε to the entries corresponding to columns x and $ in row B.<br><br>Next, we’ll look at the productions for row C. For C = x, First(x) is x, so we add x to the entry corresponding to column x in row C. For C = ε, ε is nullable, so we have to consider the Follow Set of B, which is y,$. We add ε to the entries corresponding to columns y and $ in row C.<br><br>The process for determining a grammar is LL(1) is straightforward. If there exists some entry in T with multiple entries, then the grammar is not LL(1).',
+	helptext: 'First we’ll look at the productions for A. For A = BC, First(BC) is x,y,ε. We add BC to the entries corresponding to columns x and y in row A. Notice that ε is in the First(BC) as well, so we have to consider the Follow Set of the original nonterminal symbol A, which is just $, so we add BC to the entry corresponding to column $ and row A. For A = xCy, First(xCy) is x. We add xCy to the entry corresponding to column x and row A.<br><br>Next, we’ll look at the productions for row B. For B = y, First(y) is y, so we add y to the entry corresponding to column y in row B. For B = ε, First(ε) is ε, so we have to consider the Follow Set of B, which is x,$. We add ε to the entries corresponding to columns x and $ in row B.<br><br>Next, we’ll look at the productions for row C. For C = x, First(x) is x, so we add x to the entry corresponding to column x in row C. For C = ε, First(ε) is ε, so we have to consider the Follow Set of B, which is y,$. We add ε to the entries corresponding to columns y and $ in row C.<br><br>The process for determining a grammar is LL(1) is straightforward. If there exists some entry in T with multiple entries, then the grammar is not LL(1).',
 	questions: [
 		{
 			answer: '{"A":{"x":["BC","xCy"],"y":["BC"],"$":["BC"]},"B":{"x":["ε"],"y":["y"],"$":["ε"]},"C":{"x":["x"],"y":["ε"],"$":["ε"]}}',
 			type: "parse",
 			terminals: ['x','y'],
 			non_terminals: ['A','B','C'],
-			first: ['x,y', 'y','x'],
+			first: ['x,y,ε', 'y,ε','x,ε'],
 			follow: ['$','x,$','y,$']
 		},
 		{
 			type: "text",
-			text: '<div class="aboutSection" style="padding: 40px;"><p>Note: the following only serves as a brief reminder on how LL(1) parsing works, and is not meant as a comprehensive tutorial</p><p>Parse tables are tables which are used to create an LL(1) parser. There is a column correlated with each terminal symbol, and there is a row correlated with each nonterminal symbol. Each table entry can be empty or they can contain productions.</p><p>The implementation of an LL(1) parser is outside the scope of this tutorial. Briefly, a parser will maintain a FIFO queue of symbols, which consists of nonterminal symbols and terminal symbols. Each iteration of the parser pops the first symbol from the queue. When a nonterminal symbol is encountered, the parse table is consulted to determine which production to add to the syntax tree, based on which terminal symbol the parser is currently examining within the input string.</p><p>In order for a grammar to be LL(1), each cell in a parse table must contain a single production - otherwise the derivation would be ambiguous and backtracking would be required. If a cell contains no productions, this means this cell should never be reached in any parse; if the cell is reached, it indicates that the input string is not in the grammar’s language.</p><p>The algorithm for generating a parse table is as follows:</p><ol><li>Calculate the First and Follow sets for each symbol</li><li>For each nonterminal symbol S:	</li><ol type="a"><li>For each production P</li><ol type="i"><li>Compute the First(P)</li><li>For every terminal in First(P), add P to the corresponding column</li><li>If P is nuallable, add P to every corresponding column in Follow(S)</li></ol></ol></ol></div>'
+			text: '<div class="aboutSection" style="padding: 40px;"><p>Note: the following only serves as a brief reminder on how LL(1) parsing works, and is not meant as a comprehensive tutorial</p><p>Parse tables are tables which are used to create an LL(1) parser. There is a column correlated with each terminal symbol, and there is a row correlated with each nonterminal symbol. Each table entry can be empty or they can contain productions.</p><p>The implementation of an LL(1) parser is outside the scope of this tutorial. Briefly, a parser will maintain a FIFO queue of symbols, which consists of nonterminal symbols and terminal symbols. Each iteration of the parser pops the first symbol from the queue. When a nonterminal symbol is encountered, the parse table is consulted to determine which production to add to the syntax tree, based on which terminal symbol the parser is currently examining within the input string.</p><p>In order for a grammar to be LL(1), each cell in a parse table must contain a single production - otherwise the derivation would be ambiguous and backtracking would be required. If a cell contains no productions, this means this cell should never be reached in any parse; if the cell is reached, it indicates that the input string is not in the grammar’s language.</p><p>The algorithm for generating a parse table is as follows:</p><ol><li>Calculate the First and Follow sets for each symbol</li><li>For each nonterminal symbol S:	</li><ol type="a"><li>For each production P</li><ol type="i"><li>Compute the First(P)</li><li>For every terminal in First(P), add P to the corresponding column</li><li>If ε is in First(P), add P to every corresponding column in Follow(S)</li></ol></ol></ol></div>'
 		}
 	]
 }

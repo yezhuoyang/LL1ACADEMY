@@ -31,9 +31,9 @@ SECRET_KEY = 'sc**kkwq+#zb)s-0duj-k-j^92l-cj6x^7*-*eyba#6+obwftf'
 # SECRET_KEY = 'sc**kkwq+#zb)s-0duj-k-j^92l-cj6x^7*-*eyba#6+obwftf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost',"127.0.0.1", "ll1academy.cs.ucla.edu", "mopelia"]
+ALLOWED_HOSTS = ['localhost',"127.0.0.1","ll1academy.cs.ucla.edu","mopelia"]
 
 
 # Application definition
