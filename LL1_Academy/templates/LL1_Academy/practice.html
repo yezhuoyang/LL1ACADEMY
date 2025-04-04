@@ -20,17 +20,17 @@
     		{{#each terminals}}
 	    		<div class="pretty info smooth">
 				  <input type="checkbox" name="question-check" id="{{this}}-check" value="{{this}}"> 
-				  <label for="{{this}}-check"><i class="im im-check-mark"></i>{{this}}</label>
+				  <label for="{{this}}-check">{{this}}</label>
 				</div>
 	    	{{/each}}
     	{{else}}
     		<div class="pretty circle info">
-			  <input type="radio" name="ll1" value="True" id="input1" style="display:inline;"> 
-			  <label><i class="im im-radio-button-circle"></i> True</label>
+				<input type="checkbox" name="ll1-yes" value="True" id="input1"> 
+				<label for="input1">Yes</label>
 			</div>
 			<div class="pretty circle info">
-			  <input type="radio" name="ll1" value="False" id="input2" style="display:inline; margin-left:10px;"> 
-			  <label><i class="im im-radio-button-circle" ></i> False</label>
+				<input type="checkbox" name="ll1-no" value="False" id="input2"> 
+				<label for="input2">No</label>
 			</div>
 		{{/if}}
 		<div class="feedback"></div>
@@ -47,12 +47,12 @@
     <p class="question-title">Is symbol {{symbol}} nullable?</p>
     <form id="question-input" onsubmit="return false;">
       <div class="pretty circle info">
-	<input type="radio" name="ll1" value="Yes" id="input1" style="display:inline;"> 
-	<label><i class="im im-radio-button-circle"></i> Yes</label>
+	<input type="checkbox" name="nullable-yes" value="Yes" id="input1"> 
+	<label for="input1">Yes</label>
       </div>
       <div class="pretty circle info">
-	<input type="radio" name="ll1" value="No" id="input2" style="display:inline; margin-left:10px;"> 
-	<label><i class="im im-radio-button-circle" ></i> No</label>
+	<input type="checkbox" name="nullable-no" value="No" id="input2"> 
+	<label for="input2">No</label>
       </div>
       <div class="feedback"></div>
       <div id="buttons-container">

@@ -33,12 +33,18 @@
       {{#each terminals}}
       <div class="pretty info smooth">
 	<input type="checkbox" name="question-check" id="{{this}}-check" value="{{this}}"> 
-	<label for="{{this}}-check"><i class="im im-check-mark"></i>{{this}}</label>
+	<label for="{{this}}-check">{{this}}</label>
       </div>
       {{/each}}
       {{else}}
-      <input type="radio" name="ll1" value="true" id="input1" style="display:inline;" required> Yes
-      <input type="radio" name="ll1" value="false" id="input2" style="display:inline;margin-left:10px;"> No
+	<div class="pretty circle info">
+	  <input type="checkbox" name="ll1" value="true" id="input1"> 
+	  <label for="input1">Yes</label>
+	</div>
+	<div class="pretty circle info">
+	  <input type="checkbox" name="ll1" value="false" id="input2"> 
+	  <label for="input2">No</label>
+	</div>
       {{/if}}
 		<div class="feedback"></div>
 		<div id="buttons-container">
